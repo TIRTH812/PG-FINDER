@@ -1,0 +1,79 @@
+{% extends './owner_base.html' %}
+{% load static %}
+
+{% block owner_header %}
+<!-- <nav class="sb-topnav navbar navbar-expand navbar-light"
+    style="background: linear-gradient(90deg,  rgb(83, 54, 54) 1.9%, rgb(200, 125, 76) 49.7%,  rgb(255, 241, 165) );">
+    Sidebar Toggle
+    <button class="btn btn-link btn-sm btn-light order-1 order-lg-0 me-4 me-lg-0 m-3" id="sidebarToggle" href="#!"><i
+            class="fas fa-bars"></i></button>
+    Navbar Brand
+    <a class="navbar-brand ps-3" href="/user/owner/dashboard/"><img src="{% static 'images/pg_finder_logo.svg' %}"
+            style="-webkit-filter:invert(1); filter:invert(1);" height="50"></a>
+
+    Navbar Search
+    <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
+        <div class="input-group">
+            <input class="form-control" type="text" id="search_pg_textbox" placeholder="Search for..." onkeyup="searchFromPG()" aria-label="Search for..."
+                aria-describedby="btnNavbarSearch" />
+            <button class="btn btn-primary" id="btnNavbarSearch" type="button"><i class="fas fa-search"></i></button>
+        </div>
+    </form>
+    Navbar
+    <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown"
+                aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" href="{% url 'ownerprofileupdation' %}">Manage Profile</a></li>
+                <li>
+                    <hr class="dropdown-divider" />
+                </li>
+                <li><a class="dropdown-item" href="{% url 'ownerchangepassword' %}">Change Password</a></li>
+                <li>
+                    <hr class="dropdown-divider" />
+                </li>
+                <li><a class="dropdown-item" href="/user/userlogout/">Logout</a></li>
+            </ul>
+        </li>
+    </ul>
+</nav> -->
+<header class="p-4 bg-gray-800 text-gray-100" style="position: -webkit-sticky; position: sticky;">
+	<div class="container flex justify-between h-10 mx-auto">
+		<a rel="noopener noreferrer" href="/user/owner/dashboard/" aria-label="Back to homepage" class="flex items-center p-2">
+			<img src="{% static 'images/pg_finder_logo.svg' %}"
+                style="-webkit-filter:invert(1); filter:invert(1); height: 50px;">
+		</a>
+		<ul class="items-stretch hidden space-x-3 lg:flex">
+			<li class="flex">
+				<a rel="noopener noreferrer" href="/user/owner/dashboard/" class="flex items-center px-4 -mb-1 border-b-2 border-transparent " style="color: rgb(255, 255, 255);">Home</a>
+			</li>
+			<li class="flex">
+				<a rel="noopener noreferrer" href="/user/owner/dashboard/" class="flex items-center px-4 -mb-1 border-b-2 border-transparent" style="color: white;">My PGs</a>
+			</li>
+            <li class="flex">
+				<a rel="noopener noreferrer" href="{% url 'pg_create' %}" class="flex items-center px-4 -mb-1 border-b-2 border-transparent" style="color: white;">Add PG</a>
+			</li>
+            <!-- <li class="flex">
+				<a rel="noopener noreferrer" href="/user/owner/dashboard/" class="flex items-center px-4 -mb-1 border-b-2 border-transparent" style="color: white;">Manipulate PG</a>
+			</li> -->
+			<li class="flex">
+				<a rel="noopener noreferrer" href="{% url 'ownerprofileupdation' %}" class="flex items-center px-4 -mb-1 border-b-2 border-transparent" style="color: white;">Manage Profile</a>
+			</li>
+            <li class="flex">
+				<a rel="noopener noreferrer" href="{% url 'ownerchangepassword' %}" class="flex items-center px-4 -mb-1 border-b-2 border-transparent" style="color: white;">Change Password</a>
+			</li>
+		</ul>
+		<div class="items-center flex-shrink-0 hidden lg:flex">
+			<!-- <button class="self-center px-8 py-3 rounded">Sign in</button> -->
+            <a class="self-center px-8 py-3 font-semibold rounded bg-yellow-400 text-gray-900" href="/user/userlogout/">Logout</a>
+			<!-- <button class="self-center px-8 py-3 font-semibold rounded bg-yellow-400 text-gray-900">Sign up</button> -->
+		</div>
+		<button class="p-4 lg:hidden">
+			<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6 text-gray-100">
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+			</svg>
+		</button>
+	</div>
+</header>
+{% endblock owner_header %}

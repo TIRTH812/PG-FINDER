@@ -1,0 +1,286 @@
+# import django
+from django.db import models
+from django.contrib.auth.models import AbstractUser
+
+# doubt 
+# which models will be their in which application ?
+
+
+# Create your models here.
+
+# --------------------------------------------------------------------
+# user app
+class User(AbstractUser):
+    # role_id = models.ForeignKey(Role,on_delete=models.CASCADE) # doubt 
+    # null = false ???? doubt
+    mobile_no = models.CharField(max_length=10) 
+    aadhar_no = models.CharField(max_length=12)
+    birthdate = models.DateField()
+    profile_image = models.ImageField(upload_to='user_profile_img_dir/',null=False,blank=True) #blank=False # media setup needed
+
+    is_admin = models.BooleanField(default=False)
+    is_owner = models.BooleanField(default=False)
+    is_guest = models.BooleanField(default=False)
+
+    is_deleted = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.username
+
+    class Meta:
+        db_table = 'user'
+
+# ---------------------------------------------------------------------
+
+# unknown application
+class Enquiry(models):
+    name = models.CharField(40)
+    email = models.EmailField()
+    subject = models.CharField(100)
+    message = models.TextField(max_length=2000)
+    created_at = models.DateTimeField(auto_now_add=True)    
+
+    def __str__(self):
+        return self.email
+
+    class Meta:
+        db_table = 'enquiry'
+
+# ---------------------------------------------------------------------
+
+# unknown application
+class PG_Post_Ads(models):
+    # pg_id = models.CharField(max_length=50) #doubt 
+    pg_name = models.CharField(max_length=50)
+    owner = models.ForeignKey(User,on_delete=models.CASCADE)
+    avail_status = models.BooleanField(default=False)
+    gender_type = models.CharField(max_length=20)
+    no_of_rooms = models.PositiveSmallIntegerField()
+    occupacy = models.CharField(max_length=10)
+    price = models.PositiveIntegerField()
+    pg_type = models.CharField(max_length=10)
+    address = models.CharField(max_length=100)
+    addr_street = models.CharField(max_length=100,null=True)
+    addr_area = models.CharField(max_length=50,null=True)
+    addr_city = models.CharField(max_length=20)
+    addr_state = models.CharField(max_length=20)
+    addr_country = models.CharField(max_length=20)
+    addr_pincode = models.CharField(max_length=10)
+    description = models.TextField(max_length=1000)
+    website = models.URLField() # doubt charField(max_length=50)
+    pg_profile_image = models.ImageField(upload_to='pg_profile_img_dir/',null=False,blank=True) #blank=False 
+    instruction_docs = models.FileField(upload_to='pg_instruction_docs_dir/',null=True,blank=True) # 
+    is_deletd = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    def __str__(self):
+        return self.pg_name
+    
+    class Meta:
+        db_table = 'pg_post_ads'
+
+
+
+class PG_Facility_Master(models):
+    facility_name = models.CharField(max_length=20)
+
+    def __str__(self):  
+        return self.facility_name
+    
+    class Meta:
+        db_table = 'pg_facility_master'
+
+class PG_Facility(models):
+    pg_id = models.ForeignKey(PG_Post_Ads,on_delete=models.CASCADE) # doubt pg_id or id
+    pg_facility_master_id = models.ForeignKey(PG_Facility_Master,on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.pg_facility_master_id
+    
+    class Meta:
+        db_table = 'pg_facility'
+
+
+class PG_Images(models):
+    pg_id = models.ForeignKey(PG_Post_Ads,on_delete=models.CASCADE) # doubt pg_id or id
+    pg_image_description = models.CharField(max_length=50)
+    pg_image = models.ImageField(upload_to='pg_images_dir/',null=False,blank=True) #blank=False 
+
+    def __str__(self):
+        return self.pg_image_description
+    
+    class Meta:
+        db_table = 'pg_images'
+
+
+# doubt 
+class PG_Address_LatLong(models):
+    pg_id = models.ForeignKey(PG_Post_Ads,on_delete=models.CASCADE) # doubt
+    latitude = models.DecimalField() # doubt in datatype
+    longitude = models.DecimalField() # doubt in datatype
+
+    def __str__(self):
+        return self.pg_id
+    
+    class Meta:
+        db_table = 'pg_address_latlong'
+
+
+
+# ----------------------------------------------------------------------
+
+problems: -
+done 1. remove crispy form and add relevant fields for pg post 
+done 2. how to add facility fields in our project 
+done 3. gender, pg_Type, occupacy, - pre definition
+done 4. owner id drop down remove
+5. how to get the field for form from multiple tables
+done 7. template
+done 8. login sync
+9. rating and feedback models
+done 10. on creating the pg mail should be created and sent to the owner
+done 11. if condition for the each image and file format
+12. Map funcion
+done - 13. searching & sorting
+done - 14. More photos (add photos done)
+done - 15. forgot password
+done - 16. decorators for managing access (custom validators)
+17. occupacy to occupancy spell error
+done 18. List of Available PG (if condition for avail_status=true then only in the list)
+19. Filtering especially by city Location
+20. admin module
+21. superuser using django admin module (decorators issue)
+22. error Pages
+23. delete pg or user just by setting the value from the database is_deleted = true
+24. Pagination
+25. city,state,country api
+26. 
+
+
+chat communication
+add capcha code
+light mode and dark mode
+language change option translate
+map integration
+
+other option for amenities remove unknown option
+login * remove
+avail status on/off on guest dashboard itself
+
+mail on user registration in user/views.py file
+mail on creating PG in pg_main/views.py file
+mail on contacting owner in pg_main/views.py file
+
+doubt: - 
+1. login url redirect using decorators to the specific url
+2. superuser giving access to superuser using custom decorators (2 custom decorator in 1)
+3. how to change the value of variable 
+
+
+29/04/2023
+forgot password error
+change enrollment on first page of report
+https://d3js.org/
+name change of table dd of user table
+black box and white box testing in report
+other amenities field max char 100 show it on the page.
+
+
+
+
+# PGOwnerObj = User.objects.filter(PG_PostAds__owner = id).all()
+        # PGOwnerObj = PG_PostAds.objects.filter(owner__username = 'spd18').all()
+        # print(PGOwnerObj)
+        
+        # PGOwnerObj = User.objects.filter().all()
+        # print(PGOwnerObj)
+        
+        # print(PGObj.query) 
+        # print(PGObj.owner_id)
+
+
+important for fetching data from 2 tables
+def get(self, request, *args: str, **kwargs):
+        
+        owner_id = PG_PostAds.objects.filter(id=self.kwargs['pk']).values('pg_name','owner_id')
+        print(owner_id[0]['owner_id'])
+        print('**********')
+        email = User.objects.filter(id=owner_id[0]['owner_id']).values('email')
+        print(email[0]['email'])
+        print('**********')
+        owner_emailObj = self.request.GET.get('owner_email','')
+        print(owner_emailObj)
+        
+        # return render(request, 'guest_dir/contact_owner.html', {'owner_email':owner_emailObj})
+        return super().get(request, *args, **kwargs)
+
+
+not done
+
+                                    {% for j_PG_Amenities in PG_Amenities %}
+                                    {% if j_PG_Amenities.pg_id == i_PG.id %}
+                                        <a href="{% url 'add_pg_amenities' i_PG.id %}" class="btn btn-success">Add PG
+                                                Amenities</a>
+                                    {% else %}
+                                    <a href="{% url 'detail_pg_amenities' i_PG.id %}" class="btn btn-secondary">Detail
+                                        PG
+                                        Amenities</a>
+                                    {% endif %}
+                                    {% endfor %}
+
+
+half done 
+                        <tbody style="background-color: rgb(194, 171, 204)">
+                            {% with my_var=0 %}
+                            {% for i in PG %}
+                            {% if i.profile_image %}
+                            <tr>
+                                <td><img src="{{i.profile_image.url}}" height="100" width="150" alt="image not loaded" />
+                                </td>
+                                <td>{{i.pg_name}}</td>
+                                <td>
+                                    <a href="{% url 'pg_update' i.id %}" class="btn btn-warning">Edit</a>
+                                    <a href="{% url 'pg_delete' i.id %}" class="btn btn-danger">Delete</a>
+                                    <a href="{% url 'pg_details' i.id %}" class="btn btn-primary">Details</a>
+
+                                    {% for j in PG_Amenities %}
+                                        {% if j.pg_id == i.id %}
+                                            <!-- {% with my_var as my_new_var %} -->
+                                                {{ my_var|add:1 }}
+                                                {{ my_var }}
+                                                <a href="{% url 'detail_pg_amenities' i.id %}" class="btn btn-secondary">View Amenities</a> 
+                                            <!-- {% endwith %} -->
+                                        {% endif %}    
+                                    {% endfor %}
+                                    
+                                    {% if my_var != 1 %}
+                                        <a href="{% url 'add_pg_amenities' i.id %}" class="btn btn-success">Add PG Amenities</a>
+                                    {% endif %}
+                                    
+                                </td>
+                            </tr>
+                            {% endif %}
+                            {% endfor %}
+                            {% endwith %}
+                        </tbody>
+
+
+
+<!-- {% block owner_navbar %}
+            {% include '../owner_dir/owner_navbar.html' %}
+            {% endblock owner_navbar %} -->
+
+<!-- {% block owner_navbar %}
+            {% include './owner_navbar.html' %}
+            {% endblock owner_navbar %} -->
+
+<!-- {% block guest_navbar %}
+        {% include './guest_navbar.html' %}
+        {% endblock guest_navbar %} -->
+
+<!-- {% block admin_navbar %}
+            {% include './admin_navbar.html' %}
+            {% endblock admin_navbar %} -->

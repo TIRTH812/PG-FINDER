@@ -1,0 +1,174 @@
+{% load crispy_forms_tags %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Create PG Amenities</title>
+    <link rel="icon" type="image/x-icon" href="{% static 'images/pg_finder_logo.svg' %}">
+
+    <style>
+        body {
+            background: linear-gradient(270deg, rgb(255, 255, 255) 3%, rgb(235, 158, 98) 34.6%, rgb(177, 10, 10) 63.7%, rgb(0, 0, 0) 102%);
+        }
+    </style>
+
+    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
+    <!-- <link href="{% static 'css/styles.css' %}" rel="stylesheet" /> -->
+    <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
+
+    <!-- Bootstrap core CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <!-- getting overide with the script tag at the bottom -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
+        </script>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.4.1/css/simple-line-icons.min.css"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+
+    <link rel="stylesheet" href="{% static 'css/pgform_style.css' %}">
+
+</head>
+
+<body class="sb-nav-fixed">
+
+    <!-- ----------------------------------------- -->
+    {% if request.user.is_owner %}
+    {% block owner_header %}
+    {% include '../owner_dir/owner_header.html' %}
+    {% endblock owner_header %}
+
+    {% elif request.user.is_guest %}
+    {% block guest_header %}
+    {% include '../guest_dir/guest_header.html' %}
+    {% endblock guest_header %}
+
+    {% elif request.user.is_admin %}
+    {% block admin_header %}
+    {% include '../admin_dir/admin_header.html' %}
+    {% endblock admin_header %}
+
+    {% endif %}
+
+    <!-- ----------------------------------------- -->
+
+    <!-- <div id="layoutSidenav"> -->
+        <!-- <div id="layoutSidenav_nav"> -->
+
+            <!-- ----------------------------------------- -->
+            {% if request.user.is_owner %}
+            {% block owner_navbar %}
+            {% include '../owner_dir/owner_navbar.html' %}
+            {% endblock owner_navbar %}
+
+            {% elif request.user.is_guest %}
+            {% block guest_navbar %}
+            {% include '../guest_dir/guest_navbar.html' %}
+            {% endblock guest_navbar %}
+
+            {% elif request.user.is_admin %}
+            {% block admin_navbar %}
+            {% include '../admin_dir/admin_navbar.html' %}
+            {% endblock admin_navbar %}
+
+            {% endif %}
+            <!-- ----------------------------------------- -->
+
+
+        <!-- </div>  -->
+
+        <!-- ---------------------------------------------------------- -->
+
+        <div id="layoutSidenav_content">
+            <main>
+                <div class="container-fluid px-4">
+
+                    <div class="registration-form">
+                        {% if request.user.is_guest %}
+                        <form method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="form-icon">
+                                <span><i class="icon icon-home"></i></span>
+                            </div>
+                            <div class="form-group">
+                                {{form | crispy}}
+                            </div>
+                            <div class="form-group">
+                                <input type="submit" value="Add Comment" class="btn btn-block create-account" />
+                            </div>
+                        </form>
+                        {% endif %}
+                        <div class="card" style="margin-top: 25px;">
+                            <h5 class="card-header">Comments</h5>
+                            <div class="card-body">
+                                <div class="row">
+                                    {% for i in PGComment %}
+                                    {% for j in users %}
+                                    {% if i.guest_id == j.id %}
+                                    <div class="col-11">
+                                        <h5 class="card-title" style="margin-bottom: 0px;"><i
+                                                class="fa-solid fa-user-pen"></i> {{j.first_name}} {{j.last_name}}</h5>
+                                        {% endif %}
+                                        {% endfor %}
+                                        <p class="card-text" style="margin-bottom: 0px;"><i class="fa-regular fa-comment"></i> {{i.comment}}</p>
+                                        <p class="card-text" style="margin-bottom: 15px;"><i class="fa-regular fa-star-half-stroke"></i> {{i.ratings}} Star </p>
+                                    </div>
+                                    {% if i.guest_id == request.user.id %}
+                                    <div class="col">
+                                        <a href="{% url 'pg_comments_delete' i.id %}"><i
+                                                class="fa-solid fa-trash"></i></a>
+                                    </div> 
+                                    {% endif %}         
+                                    <!-- {% for j in users %}                          
+                                    {% if j.is_admin %}
+                                    <div class="col">
+                                        <a href="{% url 'pg_comments_delete' i.id %}"><i
+                                                class="fa-solid fa-trash"></i></a>
+                                    </div>
+                                    {% endif %}
+                                    {% endfor %} -->
+                                    <!-- <hr class="dropdown-divider"> -->
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ---------------------------------------------------------- -->
+
+                </div>
+            </main>
+            <!-- ----------------------------------------- -->
+            {% if request.user.is_owner %}
+            {% block owner_footer %}
+            {% include '../owner_dir/owner_footer.html' %}
+            {% endblock owner_footer %}
+
+            {% elif request.user.is_guest %}
+            {% block guest_footer %}
+            {% include '../guest_dir/guest_footer.html' %}
+            {% endblock guest_footer %}
+
+            {% elif request.user.is_admin %}
+            {% block admin_footer %}
+            {% include '../admin_dir/admin_footer.html' %}
+            {% endblock admin_footer %}
+
+            {% endif %}
+            <!-- ----------------------------------------- -->
+        </div>
+    <!-- </div> -->
+
+</body>
+
+</html>
